@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+// JSON isteklerini doğru ayrıştırmak için Body Parser
 app.use(express.json());
 
 // Roblox Open Cloud Bilgileri
@@ -13,11 +14,18 @@ app.get('/', (req, res) => {
 });
 
 app.post('/set-rank', async (req, res) => {
-    const { secret, userId, roleId } = req.body;
+    // Body kontrolü
+    const { secret, userId, roleId } = req.body || {};
 
-    // Şifre kontrolü (Boşluk kalma ihtimaline karşı .trim() ekledik)
-    if (!secret || String(secret).trim() !== String(SERVER_SECRET).trim()) {
-        return res.status(401).json({ error: 'Unauthorized: Wrong Secret Key' });
+    console.log("Gelen istek body:", req.body);
+
+    // Şifreyi açıkça string formatına çevirip kontrol ediyoruz
+    if (!secret || String(secret) !== String(SERVER_SECRET)) {
+        return res.status(401).json({ 
+            error: 'Unauthorized', 
+            receivedSecret: secret || null,
+            expectedSecret: SERVER_SECRET 
+        });
     }
 
     try {
