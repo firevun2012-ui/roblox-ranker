@@ -19,7 +19,7 @@ const GROUP_ID = process.env.267214689;
 const SERVER_SECRET = process.env.1111;
 
 app.get('/', (req, res) => {
-    res.send('Server Active!');
+    res.send('Server Activee!');
 });
 
 app.post('/set-rank', async (req, res) => {
